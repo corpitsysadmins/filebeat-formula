@@ -19,8 +19,11 @@ filebeat_install:
     - filebeat_repo
 
 {%- set config_content = namespace(filebeat = {'inputs' : filebeat.inputs, 'config' : {'modules' : filebeat.config_modules}}, output = filebeat.output) %}
+
 {%- for output_module_name, output_module in filebeat.output.items() %}
+
 {%- if ssl in output_module %}
+
 {%- if certificate in output_module.ssl %}
 {{ filebeat.config_path ~ 'certs/' ~ output_module_name ~ '-server.crt' }}:
   file.managed:
