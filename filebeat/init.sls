@@ -39,36 +39,6 @@ filebeat_install:
 {%- do config_content.output.__getitem__(output_module_name).ssl.__setitem__('certificate', filebeat.config_path + 'certs/' + output_module_name + '-server.crt') %}
 {%- endif %}
 
-{%- if key in output_module.ssl %}
-{{ filebeat.config_path ~ 'certs/' ~ output_module_name ~ '-server.key' }}:
-  file.managed:
-    - contents: |
-        {{ config_content.output[output_module_name].ssl.key | indent(8) }}
-    - mode: 600
-    - user: root
-    - group: root
-    - require_in:
-      - file: {{ filebeat.config_path ~ 'filebeat.yml' }}
-    - watch_in:
-      - service: {{ conf.config_path }}
-{%- set config_content.output[output_module_name].ssl.key = filebeat.config_path ~ 'certs/' ~ output_module_name ~ '-server.key' %}
-{%- endif %}
-
-{%- if certificate_authorities in output_module.ssl %}
-{{ filebeat.config_path ~ 'certs/ca.crt' }}:
-  file.managed:
-    - contents: |
-        {{ config_content.output[output_module_name].ssl.certificate_authorities | indent(8) }}
-    - mode: 600
-    - user: root
-    - group: root
-    - require_in:
-      - file: {{ filebeat.config_path ~ 'filebeat.yml' }}
-    - watch_in:
-      - service: {{ conf.config_path }}
-{%- set config_content.output[output_module_name].ssl.certificate_authorities = filebeat.config_path ~ 'certs/' ~ output_module_name ~ '-ca.crt' %}
-{%- endif %}
-
 {%- endif %}
 {%- endfor %}
 
