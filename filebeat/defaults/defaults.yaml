@@ -1,4 +1,5 @@
 package_name: filebeat
+service_name: filebeat
 install_version: "'8*'"
 config_path: /etc/filebeat/
 config_modules:

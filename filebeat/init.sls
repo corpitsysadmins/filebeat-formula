@@ -26,7 +26,7 @@ filebeat_install:
     - user: root
     - group: root
     - require_in:
-      - file: {{ conf.config_path }}
+      - file: {{ filebeat.config_path ~ 'filebeat.yml' }}
     - watch_in:
       - service: {{ conf.config_path }}
 
@@ -38,7 +38,7 @@ filebeat_install:
     - user: root
     - group: root
     - require_in:
-      - file: {{ conf.config_path }}
+      - file: {{ filebeat.config_path ~ 'filebeat.yml' }}
     - watch_in:
       - service: {{ conf.config_path }}
 
@@ -50,7 +50,7 @@ filebeat_install:
     - user: root
     - group: root
     - require_in:
-      - file: {{ conf.config_path }}
+      - file: {{ filebeat.config_path ~ 'filebeat.yml' }}
     - watch_in:
       - service: {{ conf.config_path }}
 
@@ -62,23 +62,17 @@ filebeat_install:
     - user: root
     - group: root
     - mode: 644
-
-{% set ssl_cert = salt['pillar.get']('filebeat:logstash:tls:ssl_cert', 'salt://filebeat/files/ca.pem') %}
-{% set ssl_cert_path = salt['pillar.get']('filebeat:logstash:tls:ssl_cert_path') %}
-{% set managed_cert = salt['pillar.get']('filebeat:logstash:tls:managed_cert', True) %}
-{% set ssl_key = salt['pillar.get']('filebeat:logstash:tls:ssl_key') %}
-{% set ssl_key_path = salt['pillar.get']('filebeat:logstash:tls:ssl_key_path') %}
-{% set ssl_ca = salt['pillar.get']('filebeat:logstash:tls:ssl_ca') %}
-{% set ssl_ca_path = salt['pillar.get']('filebeat:logstash:tls:ssl_ca_path') %}
+    - require:
+      - filebeat_install
 
 filebeat.service:
   service.running:
-    - name: filebeat
+    - name: {{ filebeat.service_name }}
     - enable: true
     - require:
-      - pkg: filebeat
+      - filebeat_install
     - watch:
-      - file: /etc/filebeat/filebeat.yml
+      - file: {{ filebeat.config_path ~ 'filebeat.yml' }}
 
 {%- else -%}
 
