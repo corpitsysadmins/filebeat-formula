@@ -13,6 +13,10 @@ filebeat.install:
   pkg.installed:
     - name: filebeat
     - version: '8*'
+  require:
+    - filebeat_repo
+  watch:
+    - filebeat_repo
 
 {% set ssl_cert = salt['pillar.get']('filebeat:logstash:tls:ssl_cert', 'salt://filebeat/files/ca.pem') %}
 {% set ssl_cert_path = salt['pillar.get']('filebeat:logstash:tls:ssl_cert_path') %}
