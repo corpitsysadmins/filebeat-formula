@@ -23,7 +23,7 @@ filebeat_install:
 
 {%- set config_content = namespace(root = {'filebeat' : {'inputs' : filebeat.inputs, 'config' : {'modules' : filebeat.config_modules}}, 'output' : filebeat.output}) %}
 
-{{ filebeat.config_path ~ 'filebeat.yml' }}
+{{ filebeat.config_path ~ 'filebeat.yml' }}:
   file.serialize:
     - dataset:
         something:
