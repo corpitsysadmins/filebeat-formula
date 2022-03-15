@@ -7,7 +7,7 @@
 {% if filebeat.use | to_bool -%}
 
 filebeat_repo:
-  pkgrepo.managed: {{ repo_info | json }}
+  pkgrepo.managed: {{ filebeat.repo_info | json }}
 
 filebeat.install:
   pkg.installed:
