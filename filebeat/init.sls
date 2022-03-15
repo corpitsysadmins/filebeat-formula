@@ -62,38 +62,6 @@ filebeat_install:
 {% set ssl_ca = salt['pillar.get']('filebeat:logstash:tls:ssl_ca') %}
 {% set ssl_ca_path = salt['pillar.get']('filebeat:logstash:tls:ssl_ca_path') %}
 
-{% if salt['pillar.get']('filebeat:logstash:tls:enabled', False) and ssl_key and ssl_key_path and managed_cert %}
-{{ ssl_key_path }}:
-  file.managed:
-    - template: jinja
-    - makedirs: True
-    - user: root
-    - group: root
-    - mode: 644
-    - contents_pillar: filebeat:logstash:tls:ssl_key
-    - watch_in:
-      - filebeat.config
-{% endif %}
-{% if salt['pillar.get']('filebeat:logstash:tls:enabled', False) and ssl_ca and ssl_ca_path and managed_cert %}
-{{ ssl_ca_path }}:
-  file.managed:
-    - template: jinja
-    - makedirs: True
-    - user: root
-    - group: root
-    - mode: 644
-    - contents_pillar: filebeat:logstash:tls:ssl_ca
-    - watch_in:
-      - filebeat.config
-{% endif %}
-{{ conf.config_path }}
-  file.managed:
-    - source: {{ conf.config_source }}
-    - template: jinja
-    - user: root
-    - group: root
-    - mode: 644
-
 filebeat.service:
   service.running:
     - name: filebeat
