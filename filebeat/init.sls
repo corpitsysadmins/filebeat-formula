@@ -17,9 +17,9 @@ filebeat_install:
     - name: {{ filebeat.package_name }}
     - version: {{ filebeat.install_version }}
   require:
-    - filebeat_repo
+    - pkgrepo: filebeat_repo
   watch:
-    - filebeat_repo
+    - pkgrepo: filebeat_repo
 
 {%- else -%}
 
