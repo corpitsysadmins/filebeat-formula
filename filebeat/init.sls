@@ -7,7 +7,10 @@
 {% if filebeat.use | to_bool -%}
 
 filebeat_repo:
-  pkgrepo.managed: {{ filebeat.repo_info | json }}
+  pkgrepo.managed:
+{%- for key, value in filebeat.repo_info.items() %}
+    - {{ key }}: {{ value }}
+{%- endfor %}
 
 filebeat_install:
   pkg.installed:
