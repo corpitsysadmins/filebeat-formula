@@ -21,6 +21,10 @@ filebeat_install:
   watch:
     - pkgrepo: filebeat_repo
 
+{%- set config_content = namespace(filebeat = {'inputs' : filebeat.inputs, 'config' : {'modules' : filebeat.config_modules}}, output = filebeat.output) %}
+
+# {{ config_content }}
+
 {%- else -%}
 
 # Do uninstallation and cleanup stuff
