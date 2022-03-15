@@ -1,0 +1,30 @@
+filebeat:
+  inputs:
+    '/var/log/secure*':
+      type: 'log'
+      tags: ["secure"]
+      processors:
+        - add_tags:
+            tags: ["failure"]
+            target: "tags"
+            when:
+              contains:
+                message: "failure"
+        - add_tags:
+            tags: ["success"]
+            target: "tags"
+            when:
+              contains:
+                message: "success"
+    '/var/log/messages*':
+      type: 'log'
+      tags: ["messages"]
+  output:
+    logstash:
+      hosts:
+        - logstash1.example.com
+        - logstash2.example.com
+      ssl:
+        certificate_authorities: '' # CA cert content
+        certificate: '' # Cert content
+        key: '' # Key content
