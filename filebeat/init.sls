@@ -23,6 +23,13 @@ filebeat_install:
 
 {%- set config_content = namespace(root = {'filebeat' : {'inputs' : filebeat.inputs, 'config' : {'modules' : filebeat.config_modules}}, 'output' : filebeat.output}) %}
 
+{%- for output_module_name, output_module in config_content.root.output.items() %}
+
+{%- if output_module.ssl is defined %}
+
+{%- endif %}
+{%- endfor %}
+
 {{ filebeat.config_path ~ 'filebeat.yml' }}:
   file.serialize:
     - dataset: {{ config_content.root | json }}
