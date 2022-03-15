@@ -23,7 +23,15 @@ filebeat_install:
 
 {%- set config_content = namespace(filebeat = {'inputs' : filebeat.inputs, 'config' : {'modules' : filebeat.config_modules}}, output = filebeat.output) %}
 
-# {{ config_content }}
+{{ filebeat.config_path ~ 'filebeat.yml' }}
+  file.serialize:
+    - dataset: {{ config_content | json }}
+    - serializer: yaml
+    - user: root
+    - group: root
+    - mode: 644
+    - require:
+      - pkg: {{ filebeat.package_name }}
 
 {%- else -%}
 
