@@ -1,7 +1,6 @@
 filebeat:
   inputs:
-    -:
-      paths:
+    - paths:
         - '/var/log/secure*'
       type: 'log'
       tags: ["secure"]
@@ -18,8 +17,7 @@ filebeat:
             when:
               contains:
                 message: "success"
-    -:
-      paths: '/var/log/messages*'
+    - paths: '/var/log/messages*'
       type: 'log'
       tags: ["messages"]
   output:
