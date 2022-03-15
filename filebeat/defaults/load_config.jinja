@@ -1,0 +1,31 @@
+
+{% if default_sources['module'] is string %}
+	{% set default_sources = salt['slsutil.merge'](default_sources, {'module' : [default_sources['module']]}) %}
+{% endif %}
+
+{% set config = namespace(values = {}) %}
+
+{% if default_sources['defaults']|default(false) %}
+	{% import_yaml default_sources['module'][0] ~ '/defaults/defaults.yaml' as defaults %}
+	{% set inner = namespace(values = defaults) %}
+	{% for submodule in default_sources['module'][1:] %}
+		{% set inner.values = inner.values[submodule]|default({}) %}
+	{% endfor %}
+	{% set config.values = salt['slsutil.merge'](config.values, inner.values) %}
+{% endif %}
+
+{% for grain in default_sources['grains']|default([]) %}
+	{% import_yaml default_sources['module'][0] ~ '/defaults/' ~ grain ~ '.yaml' as lookup_dict %}
+	{% set filtered_values = salt['grains.filter_by'](lookup_dict, grain = grain) %}
+	{% set inner = namespace(values = filtered_values) %}
+	{% for submodule in default_sources['module'][1:] %}
+		{% set inner.values = inner.values[submodule]|default({}) %}
+	{% endfor %}
+	{% set config.values = salt['slsutil.merge'](config.values, inner.values) %}
+{% endfor %}
+
+{% if default_sources['pillar']|default(false) %}
+	{% set config.values = salt['slsutil.merge'](config.values, salt['pillar.get'](default_sources['module']|join(':'), default = {})) %}
+{% endif %}
+
+{% set config = config.values %}
