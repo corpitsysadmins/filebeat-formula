@@ -37,7 +37,7 @@ filebeat_install:
     - require_in:
       - file: {{ filebeat.config_path ~ 'filebeat.yml' }}
     - watch_in:
-      - service: {{ conf.config_path }}
+      - service: {{ filebeat.service_name }}
 {%- endif %}
 
 {%- endif %}
@@ -53,6 +53,15 @@ filebeat_install:
     - mode: 644
     - require:
       - pkg: {{ filebeat.package_name }}
+
+filebeat_service:
+  service.running:
+    - name: {{ filebeat.service_name }}
+    - enable: true
+    - require:
+      - file: {{ filebeat.config_path ~ 'filebeat.yml' }}
+    - watch:
+      - file: {{ filebeat.config_path ~ 'filebeat.yml' }}
 
 {%- else -%}
 
