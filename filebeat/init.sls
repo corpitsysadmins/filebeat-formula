@@ -65,7 +65,7 @@ filebeat_install:
     - require:
       - filebeat_install
 
-filebeat.service:
+filebeat_service:
   service.running:
     - name: {{ filebeat.service_name }}
     - enable: true
