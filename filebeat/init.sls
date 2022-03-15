@@ -28,7 +28,7 @@ filebeat_install:
 {{ filebeat.config_path ~ 'certs/' ~ output_module_name ~ '-server.crt' }}:
   file.managed:
     - contents: |
-        {{ config_content.output[output_module_name].ssl.certificate | indent(8) }}
+        {{ config_content.output|attr(output_module_name).ssl.certificate | indent(8) }}
     - mode: 600
     - user: root
     - group: root
