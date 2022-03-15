@@ -25,9 +25,7 @@ filebeat_install:
 
 {{ filebeat.config_path ~ 'filebeat.yml' }}:
   file.serialize:
-    - dataset:
-        something:
-          not: really
+    - dataset: {{ config_content.root | json }}
     - serializer: yaml
     - show_changes: true
     - user: root
