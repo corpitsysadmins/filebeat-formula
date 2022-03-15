@@ -18,27 +18,6 @@ filebeat_install:
   watch:
     - filebeat_repo
 
-{%- set config_content = namespace(filebeat = {'inputs' : filebeat.inputs, 'config' : {'modules' : filebeat.config_modules}}, output = filebeat.output) %}
-
-{{ filebeat.config_path ~ 'filebeat.yml' }}
-  file.serialize:
-    - dataset: {{ config_content | json }}
-    - serializer: yaml
-    - user: root
-    - group: root
-    - mode: 644
-    - require:
-      - filebeat_install
-
-filebeat_service:
-  service.running:
-    - name: {{ filebeat.service_name }}
-    - enable: true
-    - require:
-      - file: {{ filebeat.config_path ~ 'filebeat.yml' }}
-    - watch:
-      - file: {{ filebeat.config_path ~ 'filebeat.yml' }}
-
 {%- else -%}
 
 # Do uninstallation and cleanup stuff
