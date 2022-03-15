@@ -1,3 +1,5 @@
 package_name: filebeat
 install_version: "'8*'"
 config_path: /etc/filebeat/
+config_modules:
+  path: "${path.config}/modules.d/*.yml"

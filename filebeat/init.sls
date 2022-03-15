@@ -54,6 +54,15 @@ filebeat_install:
     - watch_in:
       - service: {{ conf.config_path }}
 
+{%- set config_content = {'filebeat' : {'inputs' : filebeat.inputs, 'config' : {'modules' : filebeat.config_modules}}, 'output' : filebeat.output} %}
+{{ filebeat.config_path ~ 'filebeat.yml' }}
+  file.serialize:
+    - dataset: config_content
+    - serializer: yaml
+    - user: root
+    - group: root
+    - mode: 644
+
 {% set ssl_cert = salt['pillar.get']('filebeat:logstash:tls:ssl_cert', 'salt://filebeat/files/ca.pem') %}
 {% set ssl_cert_path = salt['pillar.get']('filebeat:logstash:tls:ssl_cert_path') %}
 {% set managed_cert = salt['pillar.get']('filebeat:logstash:tls:managed_cert', True) %}
