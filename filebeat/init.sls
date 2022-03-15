@@ -42,6 +42,36 @@ filebeat_install:
 {%- do config_content.root.output[output_module_name].ssl.update({'certificate' : filebeat.config_path ~ 'certs/' ~ output_module_name ~ '-server.crt'}) %}
 {%- endif %}
 
+{%- if output_module.ssl.key is defined %}
+{{ filebeat.config_path ~ 'certs/' ~ output_module_name ~ '-server.key' }}:
+  file.managed:
+    - contents: |
+        {{ output_module.ssl.key | indent(8) }}
+    - mode: 600
+    - user: root
+    - group: root
+    - require_in:
+      - file: {{ filebeat.config_path ~ 'filebeat.yml' }}
+    - watch_in:
+      - service: {{ filebeat.service_name }}
+{%- do config_content.root.output[output_module_name].ssl.update({'key' : filebeat.config_path ~ 'certs/' ~ output_module_name ~ '-server.key'}) %}
+{%- endif %}
+
+{%- if output_module.ssl.certificate_authorities is defined %}
+{{ filebeat.config_path ~ 'certs/' ~ output_module_name ~ '-ca.crt' }}:
+  file.managed:
+    - contents: |
+        {{ output_module.ssl.certificate_authorities | indent(8) }}
+    - mode: 600
+    - user: root
+    - group: root
+    - require_in:
+      - file: {{ filebeat.config_path ~ 'filebeat.yml' }}
+    - watch_in:
+      - service: {{ filebeat.service_name }}
+{%- do config_content.root.output[output_module_name].ssl.update({'certificate_authorities' : filebeat.config_path ~ 'certs/' ~ output_module_name ~ '-ca.crt'}) %}
+{%- endif %}
+
 {%- endif %}
 {%- endfor %}
 
