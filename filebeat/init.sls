@@ -18,8 +18,6 @@ filebeat_install:
   watch:
     - filebeat_repo
 
-{%- set config_content = namespace(filebeat = {'inputs' : filebeat.inputs, 'config' : {'modules' : filebeat.config_modules}}, output = filebeat.output) %}
-
 {{ filebeat.config_path ~ 'filebeat.yml' }}
   file.serialize:
     - dataset: {{ config_content | json }}
