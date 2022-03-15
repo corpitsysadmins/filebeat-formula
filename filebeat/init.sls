@@ -22,9 +22,9 @@ filebeat_install:
 
 {%- for output_module_name, output_module in filebeat.output.items() %}
 
-{%- if ssl in output_module %}
+{%- if output_module.ssl is defined %}
 
-{%- if certificate in output_module.ssl %}
+{%- if output_module.ssl.certificate is defined %}
 {{ filebeat.config_path ~ 'certs/' ~ output_module_name ~ '-server.crt' }}:
   file.managed:
     - contents: |
