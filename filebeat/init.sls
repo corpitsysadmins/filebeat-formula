@@ -36,7 +36,7 @@ filebeat_install:
       - file: {{ filebeat.config_path ~ 'filebeat.yml' }}
     - watch_in:
       - service: {{ conf.config_path }}
-{%- set config_content.output[output_module_name].ssl.certificate = filebeat.config_path ~ 'certs/' ~ output_module_name ~ '-server.crt' %}
+{%- do config_content.output.__getitem__(output_module_name).ssl.__setitem__('certificate', filebeat.config_path + 'certs/' + output_module_name + '-server.crt') %}
 {%- endif %}
 
 {%- if key in output_module.ssl %}
