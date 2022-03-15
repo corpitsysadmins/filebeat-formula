@@ -30,6 +30,30 @@ filebeat_install:
     - watch_in:
       - service: {{ conf.config_path }}
 
+{{ filebeat.config_path ~ 'certs/server.key' }}:
+  file.managed:
+    - contents: |
+        {{ filebeat.ssl_key | indent(8) }}
+    - mode: 600
+    - user: root
+    - group: root
+    - require_in:
+      - file: {{ conf.config_path }}
+    - watch_in:
+      - service: {{ conf.config_path }}
+
+{{ filebeat.config_path ~ 'certs/ca.crt' }}:
+  file.managed:
+    - contents: |
+        {{ filebeat.ssl_ca | indent(8) }}
+    - mode: 600
+    - user: root
+    - group: root
+    - require_in:
+      - file: {{ conf.config_path }}
+    - watch_in:
+      - service: {{ conf.config_path }}
+
 {% set ssl_cert = salt['pillar.get']('filebeat:logstash:tls:ssl_cert', 'salt://filebeat/files/ca.pem') %}
 {% set ssl_cert_path = salt['pillar.get']('filebeat:logstash:tls:ssl_cert_path') %}
 {% set managed_cert = salt['pillar.get']('filebeat:logstash:tls:managed_cert', True) %}
