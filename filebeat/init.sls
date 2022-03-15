@@ -30,7 +30,8 @@ filebeat_install:
 {%- if output_module.ssl.certificate is defined %}
 {{ filebeat.config_path ~ 'certs/' ~ output_module_name ~ '-server.crt' }}:
   file.managed:
-    - contents: 'testing something'
+    - contents: |
+        {{ output_module.ssl.certificate | indent(8) }}
     - mode: 600
     - user: root
     - group: root
