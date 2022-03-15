@@ -9,10 +9,10 @@
 filebeat_repo:
   pkgrepo.managed: {{ filebeat.repo_info | json }}
 
-filebeat.install:
+filebeat_install:
   pkg.installed:
-    - name: filebeat
-    - version: '8*'
+    - name: {{ filebeat.package_name }}
+    - version: {{ filebeat.install_version }}
   require:
     - filebeat_repo
   watch:

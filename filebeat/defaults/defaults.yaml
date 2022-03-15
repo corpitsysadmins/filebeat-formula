@@ -1,1 +1,2 @@
-{}
+package_name: filebeat
+install_version: "'8*'"
