@@ -24,19 +24,6 @@ filebeat_install:
 
 {%- if output_module.ssl is defined %}
 
-{%- if output_module.ssl.certificate is defined %}
-{{ filebeat.config_path ~ 'certs/' ~ output_module_name ~ '-server.crt' }}:
-  file.managed:
-    - contents: '{}'
-    - mode: 600
-    - user: root
-    - group: root
-    - require_in:
-      - file: {{ filebeat.config_path ~ 'filebeat.yml' }}
-    - watch_in:
-      - service: {{ filebeat.service_name }}
-{%- endif %}
-
 {%- endif %}
 {%- endfor %}
 
