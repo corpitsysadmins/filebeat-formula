@@ -36,7 +36,7 @@ filebeat_install:
 {%- endif %}
 
 {%- if filebeat.output is defined %}
-{%- do config_content.root.update({'output', filebeat.output}) %}
+{%- do config_content.root.update({'output' : filebeat.output}) %}
 
 {%- for output_module_name, output_module in filebeat.output.items() %}
 
