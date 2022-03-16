@@ -20,12 +20,22 @@ filebeat:
     - paths: '/var/log/messages*'
       type: 'log'
       tags: ["messages"]
+  http:
+    enabled: true
+    host: localhost
+    port: 8080
   output:
     logstash:
       hosts:
         - logstash1.example.com
         - logstash2.example.com
       ssl:
-        certificate_authorities: '' # CA cert content
-        certificate: '' # Cert content
-        key: '' # Key content
+        certificate_authorities: |
+          CA cert PEM content
+          (needs replacing)
+        certificate: |
+          Cert PEM content
+          (needs replacing)
+        key: |
+          Key PEM content
+          (needs replacing)

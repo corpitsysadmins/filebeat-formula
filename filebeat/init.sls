@@ -21,9 +21,24 @@ filebeat_install:
   watch:
     - pkgrepo: filebeat_repo
 
-{%- set config_content = namespace(root = {'filebeat' : {'inputs' : filebeat.inputs, 'config' : {'modules' : filebeat.config_modules}}, 'output' : filebeat.output}) %}
+{%- set config_content = namespace(root = {'filebeat' : {}}) %}
 
-{%- for output_module_name, output_module in config_content.root.output.copy().items() %}
+{%- if filebeat.inputs is defined %}
+{%- do config_content.root.filebeat.update({'inputs' : filebeat.inputs}) %}
+{%- endif %}
+
+{%- if filebeat.config_modules is defined %}
+{%- do config_content.root.filebeat.update({'config' : {'modules' : filebeat.config_modules}}) %}
+{%- endif %}
+
+{%- if filebeat.http is defined %}
+{%- do config_content.root.update({'http' : filebeat.http}) %}
+{%- endif %}
+
+{%- if filebeat.output is defined %}
+{%- do config_content.root.update({'output', filebeat.output}) %}
+
+{%- for output_module_name, output_module in filebeat.output.items() %}
 
 {%- if output_module.ssl is defined %}
 
@@ -74,6 +89,7 @@ filebeat_install:
 
 {%- endif %}
 {%- endfor %}
+{%- endif %}
 
 {{ filebeat.config_path ~ 'filebeat.yml' }}:
   file.serialize:
