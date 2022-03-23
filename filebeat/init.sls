@@ -41,6 +41,12 @@ filebeat_install:
 {%- for output_module_name, output_module in filebeat.output.items() %}
 
 {%- if output_module.ssl is defined %}
+{{ filebeat.config_path ~ 'certs/' }}:
+  file.directory:
+    - user: root
+    - group: root
+    - mode: 600
+    - makedirs: True
 
 {%- if output_module.ssl.certificate is defined %}
 {{ filebeat.config_path ~ 'certs/' ~ output_module_name ~ '-server.crt' }}:
