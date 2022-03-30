@@ -119,6 +119,27 @@ filebeat_service:
 
 {%- else -%}
 
+{{ filebeat.service_name }}:
+  service.disabled
+
+remove_filebeat_repo:
+  pkgrepo.absent:
+{%- for key, value in filebeat.repo_info.items() %}
+    - {{ key }}: {{ value }}
+{%- endfor %}
+
+filebeat_uninstall:
+  pkg.purged:
+    - name: {{ filebeat.package_name }}
+    - version: {{ filebeat.install_version }}
+
+{{ filebeat.config_path ~ 'certs/' }}:
+  file.absent
+
+{{ filebeat.config_path ~ 'filebeat.yml' }}:
+  file.absent
+
+
 # Do uninstallation and cleanup stuff
 
 {%- endif %}
